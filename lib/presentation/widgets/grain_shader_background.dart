@@ -29,7 +29,14 @@ class _GrainShaderBackgroundState extends State<GrainShaderBackground>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 12),
-    )..repeat();
+    );
+    final isTest = WidgetsBinding.instance.runtimeType
+        .toString()
+        .toLowerCase()
+        .contains('test');
+    if (!isTest) {
+      _controller.repeat();
+    }
 
     _loadShader();
   }

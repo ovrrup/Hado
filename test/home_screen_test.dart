@@ -40,6 +40,8 @@ void main() {
     expect(find.text('Reminders'), findsNWidgets(2)); // Header + Switch label
     expect(find.text('New Reminder'), findsOneWidget);
 
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump();
     await db.close();
   });
 }
