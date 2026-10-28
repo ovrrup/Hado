@@ -1,91 +1,113 @@
 # Hado ⚡
 
-> **A minimal, local-first Flutter Habit & Reminder Manager with Glassmorphic Aesthetics.**
+> **A private, offline-first Habit Tracker and Reminders app with true glassmorphism, responsive layout, and smooth micro-interactions.**
 
-Hado unites recurring daily routines (Habits) and time-sensitive to-dos (Reminders) under a single immersive glassmorphic interface. Built with an offline-first philosophy using Drift and SQLite, featuring custom GLSL shaders, tactile frosted glass components, and distinct curated color palettes.
+Hado seamlessly unites recurring daily routines (Habits) and time-sensitive to-dos (Reminders) under an authentic dark glassmorphic workspace. Built 100% offline-first with zero tracking, zero cloud dependencies, and zero lag.
 
 ---
 
-## 🎨 Visual Redesign (v0.2.0)
+## 🎨 Visual Engine & Glassmorphism (v0.3.0)
 
-- **Pure Minimalist Mode Header**: A clutter-free header strictly displaying the current active mode (**"Habits"** or **"Reminders"**) with fluid crossfade transitions.
-- **Sub-Header Mode Switcher**: Centered frosted-glass pill toggle directly beneath the header for quick switching between modes.
-- **Granular Particle Shader Background**: Custom GLSL fragment shader (`shaders/grain.frag`) generating dynamic organic film grain and noise across smooth gradient backdrops.
-- **Dual Mode-Specific Palettes**:
-  - **Habits Mode**: Terracotta (`#b98258`), Sage (`#8fb9b2`), and Warm Cream (`#e7dfd0`).
-  - **Reminders Mode**: Apricot (`#e9b17f`), Coral (`#db7870`), and Celadon (`#d7e1d4`).
-- **Tactile Glassmorphic Cards**: Enlarged 24px-radius frosted glass containers with backdrop blurs, luminous borders, oversized touch targets, and spring animations.
-- **Curated Typography**: Crisp, modern typography powered by `GoogleFonts.outfit` for exceptional legibility and display hierarchy.
+- **`AmbientGlassScaffold`**: Deep obsidian base (`#0B0F17`) paired with 2 to 3 slowly drifting blurred radial gradient orbs on a 10-second loop. The ambient orbs dynamically cross-fade and interpolate their colors in real time based on active mode:
+  - **Habits Mode**: Emerald (`#10B981`) & Teal (`#059669`).
+  - **Reminders Mode**: Warm Amber (`#F59E0B`) & Coral (`#EA580C`).
+- **`GlassSurface` Component**: Hardware-accelerated frosted glass container utilizing:
+  - `RepaintBoundary` for rendering isolation
+  - `ClipRRect` (borderRadius: 20px)
+  - `BackdropFilter` (optical blur `sigmaX: 24`, `sigmaY: 24`)
+  - `AnimatedContainer` with white opacity `0.06` (`0.12` when pressed)
+  - 1px white highlight border with `0.14` opacity.
+- **Zero Material Clutter**: Stripped out all default Material AppBars, BottomNavigationBars, Cards, elevation shadows, and onboarding flows. The app opens directly into your workspace.
+
+---
+
+## 🧭 Navigation & Responsive Layout
+
+- **Horizontal `PageView`**: Full-screen swipeable workspace linking Habits (Page 0) and Reminders (Page 1).
+- **Floating Glass Segmented Pill**: Positioned bottom-center, featuring an active sliding glass thumb that tracks `PageController` offset and cross-fades theme colors in real time.
+- **Adjacent Circular Glass `+` FAB**: Seamless creation trigger adapting its glow to the active mode.
+- **Adaptive Screen Responsiveness**: Wrapped in a responsive `LayoutBuilder`:
+  - **Under 600px width**: Single-column vertical list with native `BouncingScrollPhysics`.
+  - **600px width and wider**: Centered 2-to-3 column responsive grid (max-width capped at 1000px).
 
 ---
 
 ## 🌟 Key Features
 
-### 🌱 Habit Tracking & Momentum
-- **Daily Check-ins**: Tap the circular action indicator to mark habits complete for today.
-- **Streak Tracking (🔥)**: Accurate current and longest streak calculations with automatic midnight rollover.
-- **Customization**: Color tags, frequency options (Daily, Weekdays, Weekends), and custom notes.
-- **Swipe-to-Delete**: Clean swipe gesture to remove habits.
+### 🌿 Habits Mode
+- **Minimal Date Header**: Prominent date label and real-time completion percentage.
+- **Animated Glass Progress Bar**: Smoothly animates width and emerald glow as habits are completed.
+- **Active vs Completed Sections**: Active habits appear at the top; completed habits smoothly transition to a dimmed bottom section.
+- **`HabitGlassCard`**:
+  - Displays title and schedule subtitle (*Daily*, *Weekdays*, *Weekends*, or specific days).
+  - **Inline 7-Day Micro-History**: Row of 7 small 8px dots (Emerald filled for done, translucent white for missed).
+  - **0.97 Scale Spring Animation**: Tapping the card triggers `HapticFeedback.lightImpact()` and springs down to 0.97 scale.
+  - **Glass Action Menu**: Long-pressing opens frosted options to *Edit*, *Skip Today*, or *Delete*.
 
-### ⏰ Time-Bound Reminders
-- **Date & Time Scheduling**: Frosted glass scheduling modal with oversized date and time selector cards.
-- **Smart Grouping**: Automatically categorizes reminders into **Today & Overdue**, **Upcoming**, and **Completed**.
-- **System Notifications**: Integrates with Android's notification system (`flutter_local_notifications`) to alert you even when the app is closed.
-- **Strike-Through Progress**: Oversized custom checkbox with instant completion feedback.
+### ⏰ Reminders Mode
+- **Smart Timeline Categorization**: Clean uppercase headers grouping items by **PINNED**, **TODAY**, **UPCOMING**, and **COMPLETED**.
+- **`ReminderGlassCard`**:
+  - Displays title with strikethrough when completed.
+  - **Due Time Pill**: Highlighted Warm Amber if due today or overdue.
+  - **Pin Icon**: Distinct amber indicator for high-priority tasks.
+- **Gestures & Micro-Interactions**:
+  - **Tap**: Toggle completion with haptic feedback.
+  - **Swipe-Right**: Mark completed via `Dismissible`.
+  - **Swipe-Left**: Snooze +1 hour and display an authentic floating **`GlassToast`**.
+  - **Long-Press**: Open frosted glass menu for *Pin/Unpin*, *Edit*, or *Delete*.
 
-### 🛡️ Privacy & Local-First
-- **100% Offline**: No accounts, no cloud sync, no tracking, and zero latency.
-- **Reactive Drift Database**: Backed by Drift and SQLite for ACID reliability and real-time UI updates via Streams.
-
----
-
-## 🚀 Downloading the App
-
-You can download the compiled Android APK directly:
-1. Head to the **[Releases](https://github.com/ovrrup/Hado/releases)** tab.
-2. Download `app-release.apk` under the latest release asset list (e.g. `v0.2.0`).
-3. Alternatively, check the **[Actions](https://github.com/ovrrup/Hado/actions)** tab to download the latest artifact from any workflow run.
-
----
-
-## 🛠️ Tech Stack & Architecture
-
-- **Framework**: [Flutter](https://flutter.dev) (Dart 3.x)
-- **Shader Pipeline**: Flutter Fragment Programs (GLSL)
-- **Typography**: [Google Fonts (Outfit)](https://pub.dev/packages/google_fonts)
-- **Database**: [Drift](https://drift.simonbinder.eu/) + `sqlite3_flutter_libs`
-- **Notifications**: `flutter_local_notifications`
-- **CI/CD Pipeline**: GitHub Actions (`ubuntu-latest` building release APK)
+### ⚡ Unified `GlassBottomSheet`
+- Opens via the circular `+` button with transparent backdrop and keyboard inset padding.
+- **In Habits Mode**: Title input, `M-T-W-T-F-S-S` weekday selector circles, and Emerald Save button.
+- **In Reminders Mode**: Title input, Pin toggle, and one-tap **Quick Time Chips** (*+1 Hour*, *Tonight 8 PM*, *Tomorrow 9 AM*, *Custom*) for 3-second task creation.
 
 ---
 
-## 💻 Local Development
+## 🛠️ Architecture & Clean Code Structure
 
-### Prerequisites
-- Flutter SDK (stable channel)
-- Android SDK (API 34)
-- Java 17
-
-### Setup & Run
-```bash
-# Clone the repository
-git clone https://github.com/ovrrup/Hado.git
-cd Hado
-
-# Fetch dependencies
-flutter pub get
-
-# Generate Drift database files
-dart run build_runner build --delete-conflicting-outputs
-
-# Run tests
-flutter test
-
-# Run on connected Android device
-flutter run
+```
+lib/
+├── main.dart                      # Workspace entrypoint & system UI styling
+├── theme/
+│   ├── app_colors.dart            # Obsidian, Emerald, Amber tokens & glass specs
+│   └── app_theme.dart             # Dark theme definition (Outfit typography)
+├── models/
+│   ├── habit.dart                 # Habit model, 7-day micro-history, JSON serialization
+│   └── reminder.dart              # Reminder model, overdue/today helpers, JSON serialization
+├── services/
+│   └── notification_service.dart  # Offline system alerts via flutter_local_notifications
+├── state/
+│   ├── storage_service.dart       # Private local persistence via shared_preferences
+│   └── app_state.dart             # Reactive state management with ChangeNotifier
+├── widgets/
+│   ├── ambient_glass_scaffold.dart# Deep obsidian background with drifting gradient orbs
+│   ├── glass_surface.dart         # Reusable optical glass widget (sigma 24, 0.06/0.12 opacity)
+│   ├── glass_nav_bar.dart         # Bottom floating segmented pill + Glass FAB
+│   ├── glass_bottom_sheet.dart    # Unified creation & editing sheet
+│   ├── glass_toast.dart           # Floating glass snooze notification
+│   ├── habit_glass_card.dart      # Habit card with micro-history dots & scale spring
+│   └── reminder_glass_card.dart   # Reminder card with due pill & swipe gestures
+└── screens/
+    ├── home_workspace_screen.dart # Main workspace with PageView & state listening
+    ├── habits_view.dart           # Responsive Habits workspace & progress bar
+    └── reminders_view.dart        # Responsive Reminders workspace & grouped headers
 ```
 
 ---
 
-## 📜 License
-Created by [ovrrup](https://github.com/ovrrup). Distributed under the MIT License.
+## 🚀 Building & Testing
+
+- **Static Analysis**:
+  ```bash
+  flutter analyze
+  ```
+  Verified: **0 errors, 0 warnings**.
+- **Unit & Widget Tests**:
+  ```bash
+  flutter test
+  ```
+  Verified: **28 unit, widget, and layout tests passing**.
+- **Build Release APK**:
+  ```bash
+  flutter build apk --release
+  ```
