@@ -205,8 +205,8 @@
 - [x] **Step 2: Update `README.md`**
   Highlight the new glassmorphic UI, custom GLSL shader, and dual color palettes.
 
-- [ ] **Step 3: Commit and tag `v0.2.0`**
+- [x] **Step 3: Commit and tag `v0.2.0`**
   Tag `v0.2.0`, push to GitHub `main` and tags.
 
-- [ ] **Step 4: Verify CI/CD workflow and release publication**
+- [x] **Step 4: Verify CI/CD workflow and release publication**
   Monitor GitHub Actions to verify automated APK compilation and release asset publishing.
