@@ -1,0 +1,7 @@
+# Example Android signing key properties
+# Copy this file to 'key.properties' and fill in your actual credentials.
+# 'key.properties' and '*.jks' files are ignored by git.
+storePassword=your_keystore_password
+keyPassword=your_key_password
+keyAlias=hado
+storeFile=hado-release.jks

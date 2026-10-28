@@ -22,6 +22,14 @@ if (flutterVersionName == null) {
     flutterVersionName = '0.1.0'
 }
 
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
 android {
     namespace "com.ovrrup.hado"
     compileSdk 34
@@ -50,9 +58,29 @@ android {
         multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            def keyFilePath = keystoreProperties.getProperty('storeFile')
+            if (keyFilePath != null) {
+                def keyFile = file(keyFilePath)
+                if (!keyFile.exists()) {
+                    keyFile = rootProject.file(keyFilePath)
+                }
+                storeFile = keyFile
+            }
+            storePassword = keystoreProperties.getProperty('storePassword')
+            keyAlias = keystoreProperties.getProperty('keyAlias')
+            keyPassword = keystoreProperties.getProperty('keyPassword')
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
+            if (keystorePropertiesFile.exists() && keystoreProperties.getProperty('storeFile') != null) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
             minifyEnabled false
             shrinkResources false
         }
