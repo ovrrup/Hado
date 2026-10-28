@@ -29,7 +29,7 @@ class GlassNavBar extends StatelessWidget {
       clampedOffset,
     )!;
 
-    const double pillWidth = 224.0;
+    const double pillWidth = 252.0;
     const double barHeight = 52.0;
     const double innerPadding = 4.0;
     const double thumbWidth = (pillWidth - (innerPadding * 2)) / 2;
@@ -98,33 +98,39 @@ class GlassNavBar extends StatelessWidget {
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () => onTabSelected(0),
                                 child: Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.check_circle_outline_rounded,
-                                        size: 16,
-                                        color: Color.lerp(
-                                          Colors.white,
-                                          Colors.white.withOpacity(0.55),
-                                          clampedOffset,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'Habits',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 0.2,
-                                          color: Color.lerp(
-                                            Colors.white,
-                                            Colors.white.withOpacity(0.55),
-                                            clampedOffset,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.check_circle_outline_rounded,
+                                            size: 16,
+                                            color: Color.lerp(
+                                              Colors.white,
+                                              Colors.white.withOpacity(0.55),
+                                              clampedOffset,
+                                            ),
                                           ),
-                                        ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            'Habits',
+                                            style: TextStyle(
+                                              fontSize: 13.5,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.2,
+                                              color: Color.lerp(
+                                                Colors.white,
+                                                Colors.white.withOpacity(0.55),
+                                                clampedOffset,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -134,33 +140,39 @@ class GlassNavBar extends StatelessWidget {
                                 behavior: HitTestBehavior.opaque,
                                 onTap: () => onTabSelected(1),
                                 child: Center(
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.alarm_rounded,
-                                        size: 16,
-                                        color: Color.lerp(
-                                          Colors.white.withOpacity(0.55),
-                                          Colors.white,
-                                          clampedOffset,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 6),
-                                      Text(
-                                        'Reminders',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 0.2,
-                                          color: Color.lerp(
-                                            Colors.white.withOpacity(0.55),
-                                            Colors.white,
-                                            clampedOffset,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(
+                                            Icons.alarm_rounded,
+                                            size: 16,
+                                            color: Color.lerp(
+                                              Colors.white.withOpacity(0.55),
+                                              Colors.white,
+                                              clampedOffset,
+                                            ),
                                           ),
-                                        ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            'Reminders',
+                                            style: TextStyle(
+                                              fontSize: 13.5,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: 0.2,
+                                              color: Color.lerp(
+                                                Colors.white.withOpacity(0.55),
+                                                Colors.white,
+                                                clampedOffset,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
