@@ -13,11 +13,13 @@ import 'dialogs/create_reminder_sheet.dart';
 class HomeScreen extends StatefulWidget {
   final AppDatabase database;
   final NotificationService notificationService;
+  final bool enableShaderAnimation;
 
   const HomeScreen({
     super.key,
     required this.database,
     required this.notificationService,
+    this.enableShaderAnimation = true,
   });
 
   @override
@@ -59,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return GrainShaderBackground(
       isHabitMode: _isHabits,
+      enableAnimation: widget.enableShaderAnimation,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

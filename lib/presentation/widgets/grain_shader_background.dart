@@ -6,11 +6,13 @@ import '../../core/theme.dart';
 class GrainShaderBackground extends StatefulWidget {
   final bool isHabitMode;
   final Widget child;
+  final bool enableAnimation;
 
   const GrainShaderBackground({
     super.key,
     required this.isHabitMode,
     required this.child,
+    this.enableAnimation = true,
   });
 
   @override
@@ -30,31 +32,16 @@ class _GrainShaderBackgroundState extends State<GrainShaderBackground>
       vsync: this,
       duration: const Duration(seconds: 12),
     );
-    final isTest = WidgetsBinding.instance.runtimeType
-        .toString()
-        .toLowerCase()
-        .contains('test');
-    if (!isTest) {
-      _controller.repeat();
-    }
 
-    _loadShader();
+    if (widget.enableAnimation) {
+      _controller.repeat();
+      _loadShader();
+    } else {
+      _shaderLoadFailed = true;
+    }
   }
 
   Future<void> _loadShader() async {
-    final isTest = WidgetsBinding.instance.runtimeType
-        .toString()
-        .toLowerCase()
-        .contains('test');
-    if (isTest) {
-      if (mounted) {
-        setState(() {
-          _shaderLoadFailed = true;
-        });
-      }
-      return;
-    }
-
     try {
       final program =
           await ui.FragmentProgram.fromAsset('shaders/grain.frag');

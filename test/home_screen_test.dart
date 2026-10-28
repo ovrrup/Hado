@@ -20,12 +20,12 @@ void main() {
         home: HomeScreen(
           database: db,
           notificationService: notifications,
+          enableShaderAnimation: false,
         ),
       ),
     );
 
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 100));
+    await tester.pumpAndSettle();
 
     // Initial state: Habits header
     expect(find.text('Habits'), findsNWidgets(2)); // Header + Switch label
@@ -33,15 +33,12 @@ void main() {
 
     // Tap Reminders on switch
     await tester.tap(find.text('Reminders'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 350));
+    await tester.pumpAndSettle();
 
     // Now header is Reminders
     expect(find.text('Reminders'), findsNWidgets(2)); // Header + Switch label
     expect(find.text('New Reminder'), findsOneWidget);
 
-    await tester.pumpWidget(const SizedBox());
-    await tester.pump();
     await db.close();
   });
 }

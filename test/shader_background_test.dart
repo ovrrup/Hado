@@ -9,6 +9,7 @@ void main() {
       const MaterialApp(
         home: GrainShaderBackground(
           isHabitMode: true,
+          enableAnimation: false,
           child: Scaffold(
             body: Center(
               child: Text('Test Content'),
