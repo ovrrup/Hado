@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum AppTab { habits, reminders }
 
@@ -12,46 +13,95 @@ class HadoPalettes {
   static const reminderApricot = Color(0xFFE9B17F);
   static const reminderCoral = Color(0xFFDB7870);
   static const reminderCeladon = Color(0xFFD7E1D4);
+
+  // Glass and neutral tokens
+  static const glassBorderLight = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0x66FFFFFF),
+      Color(0x1AFFFFFF),
+    ],
+  );
+
+  static const glassBorderDark = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0x33FFFFFF),
+      Color(0x0DFFFFFF),
+    ],
+  );
 }
 
 class AppTheme {
-  static const primarySeed = Color(0xFF6750A4);
-  static const habitColor = Color(0xFF4CAF50);
-  static const reminderColor = Color(0xFF3F51B5);
+  static TextTheme _getTextTheme(Brightness brightness) {
+    try {
+      final base = brightness == Brightness.light
+          ? ThemeData.light().textTheme
+          : ThemeData.dark().textTheme;
+      return GoogleFonts.outfitTextTheme(base);
+    } catch (_) {
+      return const TextTheme();
+    }
+  }
 
-  static ThemeData lightTheme = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: primarySeed,
-      brightness: Brightness.light,
-    ),
-    scaffoldBackgroundColor: const Color(0xFFF8F9FA),
-    cardTheme: CardThemeData(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: Color(0xFFE5E7EB)),
-      ),
-      color: Colors.white,
-    ),
-    appBarTheme: const AppBarTheme(
-      centerTitle: true,
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-    ),
-  );
+  static ThemeData getTheme(bool isHabitsMode, {bool isDark = false}) {
+    final primary = isHabitsMode
+        ? HadoPalettes.habitTerracotta
+        : HadoPalettes.reminderCoral;
 
-  static ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: primarySeed,
-      brightness: Brightness.dark,
-    ),
-    cardTheme: CardThemeData(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+    final secondary = isHabitsMode
+        ? HadoPalettes.habitSage
+        : HadoPalettes.reminderApricot;
+
+    final brightness = isDark ? Brightness.dark : Brightness.light;
+    final textTheme = _getTextTheme(brightness);
+
+    return ThemeData(
+      useMaterial3: true,
+      brightness: brightness,
+      primaryColor: primary,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primary,
+        brightness: brightness,
+        primary: primary,
+        secondary: secondary,
       ),
-    ),
-  );
+      scaffoldBackgroundColor: Colors.transparent, // Lets shader background shine through
+      textTheme: textTheme.copyWith(
+        displayLarge: textTheme.displayLarge?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -1.0,
+        ),
+        displayMedium: textTheme.displayMedium?.copyWith(
+          fontWeight: FontWeight.w800,
+          letterSpacing: -0.5,
+        ),
+        headlineLarge: textTheme.headlineLarge?.copyWith(
+          fontWeight: FontWeight.w700,
+          letterSpacing: -0.5,
+        ),
+        headlineMedium: textTheme.headlineMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: textTheme.titleLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        color: isDark
+            ? Colors.black.withOpacity(0.25)
+            : Colors.white.withOpacity(0.4),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+      ),
+    );
+  }
+
+  // Backwards compatibility defaults
+  static ThemeData lightTheme = getTheme(true, isDark: false);
+  static ThemeData darkTheme = getTheme(true, isDark: true);
 }
