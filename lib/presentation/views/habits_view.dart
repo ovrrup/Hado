@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../core/theme.dart';
 import '../../data/database.dart';
+import '../widgets/glass_container.dart';
 import '../widgets/habit_card.dart';
 
 class HabitsView extends StatelessWidget {
@@ -9,8 +11,6 @@ class HabitsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return StreamBuilder<List<HabitWithStreak>>(
       stream: database.watchHabitsWithTodayStatus(),
       builder: (context, snapshot) {
@@ -23,37 +23,58 @@ class HabitsView extends StatelessWidget {
         if (items.isEmpty) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.self_improvement,
-                    size: 72,
-                    color: theme.colorScheme.primary.withOpacity(0.4),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No Habits Yet',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: GlassContainer(
+                blur: 16,
+                opacity: 0.5,
+                borderRadius: BorderRadius.circular(28),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 36),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        color: HadoPalettes.habitTerracotta.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.spa_rounded,
+                          size: 40,
+                          color: HadoPalettes.habitTerracotta,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Tap "+ New Habit" below to start tracking your daily routines and build streaks.',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.hintColor,
+                    const SizedBox(height: 18),
+                    const Text(
+                      'No Habits Yet',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF2C241E),
+                        letterSpacing: -0.3,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Start small by creating your first daily routine and build your streak.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xFF6E6862),
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         }
 
-        // Sort: Incomplete habits first, then completed habits
+        // Sort: Incomplete first, then completed
         final sortedItems = List<HabitWithStreak>.from(items)
           ..sort((a, b) {
             if (a.isCompletedToday == b.isCompletedToday) return 0;
@@ -61,7 +82,7 @@ class HabitsView extends StatelessWidget {
           });
 
         return ListView.builder(
-          padding: const EdgeInsets.only(top: 8, bottom: 88),
+          padding: const EdgeInsets.only(top: 6, bottom: 100),
           itemCount: sortedItems.length,
           itemBuilder: (context, index) {
             final item = sortedItems[index];
@@ -78,6 +99,7 @@ class HabitsView extends StatelessWidget {
                 database.deleteHabit(item.habit.id);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: const Color(0xFF2C241E),
                     content: Text('Deleted "${item.habit.title}"'),
                     duration: const Duration(seconds: 2),
                   ),
