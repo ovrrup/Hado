@@ -1,16 +1,25 @@
 # Hado ⚡
 
-> **A minimal, local-first Flutter Habit & Reminder Manager for Android.**
+> **A minimal, local-first Flutter Habit & Reminder Manager with Glassmorphic Aesthetics.**
 
-Hado unites recurring daily routines (Habits) and time-sensitive to-dos (Reminders) under a single home screen with a master switch toggle. Built with an offline-first philosophy using Drift and SQLite.
+Hado unites recurring daily routines (Habits) and time-sensitive to-dos (Reminders) under a single immersive glassmorphic interface. Built with an offline-first philosophy using Drift and SQLite, featuring custom GLSL shaders, tactile frosted glass components, and distinct curated color palettes.
+
+---
+
+## 🎨 Visual Redesign (v0.2.0)
+
+- **Pure Minimalist Mode Header**: A clutter-free header strictly displaying the current active mode (**"Habits"** or **"Reminders"**) with fluid crossfade transitions.
+- **Sub-Header Mode Switcher**: Centered frosted-glass pill toggle directly beneath the header for quick switching between modes.
+- **Granular Particle Shader Background**: Custom GLSL fragment shader (`shaders/grain.frag`) generating dynamic organic film grain and noise across smooth gradient backdrops.
+- **Dual Mode-Specific Palettes**:
+  - **Habits Mode**: Terracotta (`#b98258`), Sage (`#8fb9b2`), and Warm Cream (`#e7dfd0`).
+  - **Reminders Mode**: Apricot (`#e9b17f`), Coral (`#db7870`), and Celadon (`#d7e1d4`).
+- **Tactile Glassmorphic Cards**: Enlarged 24px-radius frosted glass containers with backdrop blurs, luminous borders, oversized touch targets, and spring animations.
+- **Curated Typography**: Crisp, modern typography powered by `GoogleFonts.outfit` for exceptional legibility and display hierarchy.
 
 ---
 
 ## 🌟 Key Features
-
-### 🔀 Master Switch
-- Prominently placed at the top of the home screen to seamlessly slide between **Habits** and **Reminders** without losing scroll position or state.
-- Dynamic Action Button (+) automatically adapts to create habits or reminders depending on the active view.
 
 ### 🌱 Habit Tracking & Momentum
 - **Daily Check-ins**: Tap the circular action indicator to mark habits complete for today.
@@ -19,10 +28,10 @@ Hado unites recurring daily routines (Habits) and time-sensitive to-dos (Reminde
 - **Swipe-to-Delete**: Clean swipe gesture to remove habits.
 
 ### ⏰ Time-Bound Reminders
-- **Date & Time Scheduling**: Schedule tasks with date and time pickers.
+- **Date & Time Scheduling**: Frosted glass scheduling modal with oversized date and time selector cards.
 - **Smart Grouping**: Automatically categorizes reminders into **Today & Overdue**, **Upcoming**, and **Completed**.
 - **System Notifications**: Integrates with Android's notification system (`flutter_local_notifications`) to alert you even when the app is closed.
-- **Strike-Through Progress**: Visual checkbox with completion timestamps.
+- **Strike-Through Progress**: Oversized custom checkbox with instant completion feedback.
 
 ### 🛡️ Privacy & Local-First
 - **100% Offline**: No accounts, no cloud sync, no tracking, and zero latency.
@@ -34,7 +43,7 @@ Hado unites recurring daily routines (Habits) and time-sensitive to-dos (Reminde
 
 You can download the compiled Android APK directly:
 1. Head to the **[Releases](https://github.com/ovrrup/Hado/releases)** tab.
-2. Download `app-release.apk` under the latest release asset list (e.g. `v0.1.0`).
+2. Download `app-release.apk` under the latest release asset list (e.g. `v0.2.0`).
 3. Alternatively, check the **[Actions](https://github.com/ovrrup/Hado/actions)** tab to download the latest artifact from any workflow run.
 
 ---
@@ -42,9 +51,10 @@ You can download the compiled Android APK directly:
 ## 🛠️ Tech Stack & Architecture
 
 - **Framework**: [Flutter](https://flutter.dev) (Dart 3.x)
+- **Shader Pipeline**: Flutter Fragment Programs (GLSL)
+- **Typography**: [Google Fonts (Outfit)](https://pub.dev/packages/google_fonts)
 - **Database**: [Drift](https://drift.simonbinder.eu/) + `sqlite3_flutter_libs`
 - **Notifications**: `flutter_local_notifications`
-- **Design System**: Material 3 Design
 - **CI/CD Pipeline**: GitHub Actions (`ubuntu-latest` building release APK)
 
 ---
