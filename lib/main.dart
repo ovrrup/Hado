@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'core/theme.dart';
 import 'data/database.dart';
 import 'services/notification_service.dart';
@@ -6,6 +7,16 @@ import 'presentation/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Edge-to-edge transparent system navigation and status bar
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
 
   final database = AppDatabase();
   final notificationService = NotificationService.instance;
@@ -33,9 +44,9 @@ class HadoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hado',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      theme: AppTheme.getTheme(true, isDark: false),
+      darkTheme: AppTheme.getTheme(true, isDark: true),
+      themeMode: ThemeMode.light,
       home: HomeScreen(
         database: database,
         notificationService: notificationService,
