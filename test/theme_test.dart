@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hado/core/theme.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   test('HadoPalettes contains exact hex values requested', () {
     expect(HadoPalettes.habitTerracotta.value, equals(0xFFB98258));
     expect(HadoPalettes.habitSage.value, equals(0xFF8FB9B2));

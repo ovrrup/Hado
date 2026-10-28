@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:drift/native.dart';
 import 'package:hado/data/database.dart';
 import 'package:hado/services/notification_service.dart';
@@ -7,6 +8,9 @@ import 'package:hado/presentation/views/reminders_view.dart';
 import 'package:hado/presentation/widgets/reminder_card.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
+
   testWidgets('RemindersView displays empty state when no reminders exist',
       (tester) async {
     final db = AppDatabase(NativeDatabase.memory());
@@ -58,7 +62,7 @@ void main() {
     expect(find.text('Bring records'), findsOneWidget);
 
     // Tap checkbox circle
-    await tester.tap(find.byType(GestureDetector).first);
+    await tester.tap(find.byKey(const Key('reminder_checkbox_1')));
     expect(toggled, isTrue);
   });
 }

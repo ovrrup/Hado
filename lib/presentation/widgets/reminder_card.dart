@@ -69,6 +69,7 @@ class ReminderCard extends StatelessWidget {
           children: [
             // Custom Oversized Checkbox Circle
             GestureDetector(
+              key: Key('reminder_checkbox_${reminder.id}'),
               onTap: () {
                 HapticFeedback.lightImpact();
                 onToggle(!isDone);
