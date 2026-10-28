@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../core/theme.dart';
 import '../../data/database.dart';
 import '../../services/notification_service.dart';
+import '../widgets/glass_container.dart';
 import '../widgets/reminder_card.dart';
 
 class RemindersView extends StatelessWidget {
@@ -15,8 +17,6 @@ class RemindersView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return StreamBuilder<List<Reminder>>(
       stream: database.watchReminders(includeCompleted: true),
       builder: (context, snapshot) {
@@ -29,31 +29,52 @@ class RemindersView extends StatelessWidget {
         if (reminders.isEmpty) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.notifications_active_outlined,
-                    size: 72,
-                    color: theme.colorScheme.primary.withOpacity(0.4),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No Reminders Yet',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+              padding: const EdgeInsets.symmetric(horizontal: 28),
+              child: GlassContainer(
+                blur: 16,
+                opacity: 0.5,
+                borderRadius: BorderRadius.circular(28),
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 36),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 76,
+                      height: 76,
+                      decoration: BoxDecoration(
+                        color: HadoPalettes.reminderCoral.withOpacity(0.15),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.alarm_on_rounded,
+                          size: 40,
+                          color: HadoPalettes.reminderCoral,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Tap "+ New Reminder" to schedule tasks and time-sensitive alerts.',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.hintColor,
+                    const SizedBox(height: 18),
+                    const Text(
+                      'No Reminders Yet',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF2C241E),
+                        letterSpacing: -0.3,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Schedule tasks and time-sensitive alerts to stay effortlessly on top of your day.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Color(0xFF6E6862),
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
@@ -77,18 +98,21 @@ class RemindersView extends StatelessWidget {
         }
 
         return ListView(
-          padding: const EdgeInsets.only(top: 8, bottom: 88),
+          padding: const EdgeInsets.only(top: 6, bottom: 100),
           children: [
             if (overdueAndToday.isNotEmpty) ...[
-              _buildSectionHeader(context, 'Today & Overdue', overdueAndToday.length, Colors.red.shade700),
+              _buildSectionHeader('Today & Overdue', overdueAndToday.length,
+                  HadoPalettes.reminderCoral),
               ...overdueAndToday.map((r) => _buildCard(context, r)),
             ],
             if (upcoming.isNotEmpty) ...[
-              _buildSectionHeader(context, 'Upcoming', upcoming.length, theme.colorScheme.primary),
+              _buildSectionHeader(
+                  'Upcoming', upcoming.length, const Color(0xFF944F1A)),
               ...upcoming.map((r) => _buildCard(context, r)),
             ],
             if (completed.isNotEmpty) ...[
-              _buildSectionHeader(context, 'Completed', completed.length, Colors.grey),
+              _buildSectionHeader(
+                  'Completed', completed.length, const Color(0xFF756F68)),
               ...completed.map((r) => _buildCard(context, r)),
             ],
           ],
@@ -97,33 +121,36 @@ class RemindersView extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(
-      BuildContext context, String title, int count, Color accentColor) {
+  Widget _buildSectionHeader(String title, int count, Color accentColor) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
       child: Row(
         children: [
           Text(
             title,
             style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.3,
+              fontSize: 15,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.2,
               color: accentColor,
             ),
           ),
           const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: accentColor.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(10),
+              color: accentColor.withOpacity(0.14),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: accentColor.withOpacity(0.25),
+                width: 1,
+              ),
             ),
             child: Text(
               '$count',
               style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
+                fontSize: 12,
+                fontWeight: FontWeight.w800,
                 color: accentColor,
               ),
             ),
@@ -152,12 +179,14 @@ class RemindersView extends StatelessWidget {
       onDelete: () async {
         await database.deleteReminder(reminder.id);
         await notificationService.cancelReminder(reminder.id);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Deleted "${reminder.title}"'),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Deleted "${reminder.title}"'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
       },
     );
   }
