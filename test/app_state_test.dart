@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hado/models/habit.dart';
 import 'package:hado/services/notification_service.dart';
 import 'package:hado/state/app_state.dart';
 import 'package:hado/state/storage_service.dart';

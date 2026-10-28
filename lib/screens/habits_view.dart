@@ -334,10 +334,10 @@ class HabitsView extends StatelessWidget {
                           onEdit: () => _openEditSheet(context, habit),
                           onSkipToday: () => unawaited(appState.skipHabitToday(habit.id)),
                           onDelete: () => _confirmDelete(context, habit),
-                        );
-                      },
-                      childCount: completedHabits.length,
-                    ),
+                        ),
+                      );
+                    },
+                    childCount: completedHabits.length,
                   ),
                 )
               else
@@ -361,10 +361,10 @@ class HabitsView extends StatelessWidget {
                             onEdit: () => _openEditSheet(context, habit),
                             onSkipToday: () => unawaited(appState.skipHabitToday(habit.id)),
                             onDelete: () => _confirmDelete(context, habit),
-                          );
-                        },
-                        childCount: completedHabits.length,
-                      ),
+                          ),
+                        );
+                      },
+                      childCount: completedHabits.length,
                     ),
                   ),
                 ),

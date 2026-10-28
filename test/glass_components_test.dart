@@ -138,11 +138,11 @@ void main() {
     });
 
     test('AppColors contains exact design specifications', () {
-      expect(AppColors.obsidianBase.value, equals(0xFF0B0F17));
-      expect(AppColors.emerald.value, equals(0xFF10B981));
-      expect(AppColors.teal.value, equals(0xFF059669));
-      expect(AppColors.warmAmber.value, equals(0xFFF59E0B));
-      expect(AppColors.coral.value, equals(0xFFEA580C));
+      expect(AppColors.obsidianBase.toARGB32(), equals(0xFF0B0F17));
+      expect(AppColors.emerald.toARGB32(), equals(0xFF10B981));
+      expect(AppColors.teal.toARGB32(), equals(0xFF059669));
+      expect(AppColors.warmAmber.toARGB32(), equals(0xFFF59E0B));
+      expect(AppColors.coral.toARGB32(), equals(0xFFEA580C));
       expect(AppColors.glassBlurSigma, equals(24.0));
       expect(AppColors.glassBorderRadius, equals(20.0));
       expect(AppColors.glassBorderWidth, equals(1.0));
