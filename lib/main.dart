@@ -1,24 +1,44 @@
 import 'package:flutter/material.dart';
+import 'core/theme.dart';
+import 'data/database.dart';
+import 'services/notification_service.dart';
+import 'presentation/home_screen.dart';
 
-void main() {
-  runApp(const HadoApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final database = AppDatabase();
+  final notificationService = NotificationService.instance;
+  await notificationService.init();
+  await notificationService.requestPermissions();
+
+  runApp(HadoApp(
+    database: database,
+    notificationService: notificationService,
+  ));
 }
 
 class HadoApp extends StatelessWidget {
-  const HadoApp({super.key});
+  final AppDatabase database;
+  final NotificationService notificationService;
+
+  const HadoApp({
+    super.key,
+    required this.database,
+    required this.notificationService,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Hado',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6750A4)),
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hado - Habit & Reminder Manager'),
-        ),
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
+      home: HomeScreen(
+        database: database,
+        notificationService: notificationService,
       ),
     );
   }
