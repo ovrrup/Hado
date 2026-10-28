@@ -43,20 +43,24 @@ jobs:
         run: flutter test
 
       - name: Configure Android Signing Keystore
-        if: ${{ secrets.KEYSTORE_BASE64 != '' }}
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > android/app/hado-release.jks
-          cat <<EOF > android/key.properties
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "Configuring release signing keystore..."
+            echo "$KEYSTORE_BASE64" | base64 --decode > android/app/hado-release.jks
+            cat <<EOF > android/key.properties
           storePassword=$KEYSTORE_PASSWORD
           keyPassword=$KEY_PASSWORD
           keyAlias=$KEY_ALIAS
           storeFile=hado-release.jks
           EOF
+          else
+            echo "No signing secret found; proceeding with debug fallback."
+          fi
 
       - name: Build Android Release APK
         run: flutter build apk --release --android-skip-build-dependency-validation
