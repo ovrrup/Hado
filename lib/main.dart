@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'core/theme.dart';
-import 'data/database.dart';
+import 'screens/home_workspace_screen.dart';
 import 'services/notification_service.dart';
-import 'presentation/home_screen.dart';
+import 'state/app_state.dart';
+import 'state/storage_service.dart';
+import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,31 +13,34 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
 
-  final database = AppDatabase();
+  final storageService = await StorageService.create();
   final notificationService = NotificationService.instance;
   await notificationService.init();
   await notificationService.requestPermissions();
 
-  runApp(HadoApp(
-    database: database,
+  final appState = AppState(
+    storageService: storageService,
     notificationService: notificationService,
-  ));
+  );
+  await appState.init();
+
+  runApp(HadoApp(appState: appState));
 }
 
 class HadoApp extends StatelessWidget {
-  final AppDatabase database;
-  final NotificationService notificationService;
+  final AppState appState;
+  final bool enableScaffoldAnimation;
 
   const HadoApp({
     super.key,
-    required this.database,
-    required this.notificationService,
+    required this.appState,
+    this.enableScaffoldAnimation = true,
   });
 
   @override
@@ -44,12 +48,12 @@ class HadoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hado',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.getTheme(true, isDark: false),
-      darkTheme: AppTheme.getTheme(true, isDark: true),
-      themeMode: ThemeMode.light,
-      home: HomeScreen(
-        database: database,
-        notificationService: notificationService,
+      theme: AppTheme.darkTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
+      home: HomeWorkspaceScreen(
+        appState: appState,
+        enableScaffoldAnimation: enableScaffoldAnimation,
       ),
     );
   }
